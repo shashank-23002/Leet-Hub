@@ -11,29 +11,63 @@ class Solution
     vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
         // Code here
-        priority_queue< pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
-        pq.push({0,S});
-        vector<int> dist(V,1e9);
-        dist[S]=0;
+        // priority_queue< pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+        // pq.push({0,S});
+        // vector<int> dist(V,1e9);
+        // dist[S]=0;
         
-        while(!pq.empty())
+        // while(!pq.empty())
+        // {
+        //     int node=pq.top().second;
+        //     pq.pop();
+        //     for(auto it:adj[node])
+        //     {
+        //         int adjnode=it[0];
+        //         int weight=it[1];
+        //         if(dist[node]+weight<dist[adjnode])
+        //         {
+        //             dist[adjnode]=dist[node]+weight;
+        //             pq.push({dist[adjnode],adjnode});
+        //         }
+        //     }
+        // }
+        
+        // return dist;
+        
+        
+        set<pair<int,int>>st;
+        vector<int> dist(V,1e9);
+        st.insert({0,S});
+        dist[S]=0;
+        while(!st.empty())
         {
-            int node=pq.top().second;
-            pq.pop();
-            for(auto it:adj[node])
+            auto it=*(st.begin());
+            int node=it.second;
+            st.erase(it);
+            for(auto i:adj[node])
             {
-                int adjnode=it[0];
-                int weight=it[1];
+                int adjnode=i[0];
+                int weight=i[1];
                 if(dist[node]+weight<dist[adjnode])
                 {
-                    dist[adjnode]=dist[node]+weight;
-                    pq.push({dist[adjnode],adjnode});
+                    if(dist[adjnode]!=1e9)
+                    {
+                        st.erase({dist[adjnode],adjnode});
+                        dist[adjnode]=dist[node]+weight;
+                        st.insert({dist[adjnode],adjnode});
+                    }
+                    
+                    else
+                    {
+                        dist[adjnode]=dist[node]+weight;
+                        st.insert({dist[adjnode],adjnode});
+                    }
+                    
                 }
             }
         }
         
         return dist;
-        
     }
 };
 
